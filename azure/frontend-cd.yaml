@@ -1,0 +1,23 @@
+# Angular - Frontend - CD
+
+trigger:
+    - main
+
+steps:
+    -   task: Docker@2
+        displayName: 'Build'
+        inputs:
+            containerRegistry: 'RegistryJoachim'
+            repository: 'rooster-singing/frontend'
+            command: 'build'
+            Dockerfile: 'Dockerfile'
+            tags: latest
+            arguments: '--build-arg configuration=production'
+
+    -   task: Docker@2
+        displayName: 'Push'
+        inputs:
+            containerRegistry: 'RegistryJoachim'
+            repository: 'rooster-singing/frontend'
+            command: 'push'
+            tags: latest
