@@ -1,0 +1,253 @@
+<button (click)="numberOfPlayersWanted = numberOfPlayersWanted - 1; setPlayers(); calculateResults()">-</button>
+<input type="number" [(ngModel)]="numberOfPlayersWanted" (ngModelChange)="setPlayers(); calculateResults()">
+<button (click)="numberOfPlayersWanted = numberOfPlayersWanted + 1; setPlayers(); calculateResults()">+</button>
+<button (click)="savePlayers()">Opslaan</button>
+
+<div class="tableFixHead">
+<table>
+    <thead>
+    <tr>
+        <th [colSpan]="3"></th>
+        <th [colSpan]="8">Onderzang</th>
+        <th [colSpan]="7">Overzang</th>
+        <th></th>
+        <th [colSpan]="2">Zang</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th>Loge</th>
+        <th>Naam</th>
+        <th>VPL<br>€{{prices.underVpl}}</th>
+        <th>Per 5<br>€{{prices.underPerFive}}</th>
+        <th>VW<br>€{{prices.underVw}}</th>
+        <th>0<br>€{{prices.underZero}}</th>
+        <th>-1<br>€{{prices.underMinusOne}}</th>
+        <th>-2<br>€{{prices.underMinusTwo}}</th>
+        <th>-3<br>€{{prices.underMinusThree}}</th>
+        <th>Buffet<br>€{{prices.underBuffet}}</th>
+        <th>Vpl<br>€{{prices.overVpl}}</th>
+        <th>Per 5<br>€{{prices.overPerFive}}</th>
+        <th>VW<br>€{{prices.overVw}}</th>
+        <th>+1<br>€{{prices.overPlusOne}}</th>
+        <th>+2<br>€{{prices.overPlusTwo}}</th>
+        <th>+3<br>€{{prices.overPlusThree}}</th>
+        <th>Buffet<br>€{{prices.overBuffet}}</th>
+        <th>Totaal</th>
+        <th>Doel</th>
+        <th>Resultaat</th>
+    </tr>
+    </thead>
+    <tbody>
+        @for (player of players; track $index) {
+    <tr (click)="selectedPlayerId = player.id">
+        <td>
+            @if (selectedPlayerId === player.id) {
+                &#8594;
+            }
+        </td>
+        <td>{{player.id}}</td>
+        <td>
+            <input (ngModelChange)="calculateResults()" [(ngModel)]="player.name">
+            @if (player.id > 1) {
+            <button (click)="copyPreviousName(player)">&#8593;</button>
+            }
+        </td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underVpl" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underPerFive" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underVw" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underZero" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underMinusOne" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underMinusTwo" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underMinusThree" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.underBuffet" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overVpl" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overPerFive" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overVw" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overPlusOne" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overPlusTwo" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overPlusThree" /></td>
+        <td><input type="checkbox" (ngModelChange)="calculateResults()" [(ngModel)]="player.overBuffet" /></td>
+        <td>€{{getTotalAmount(player)}}</td>
+        <td>
+            <input (ngModelChange)="calculateResults()" class="small" type="number" [(ngModel)]="player.goal">
+        </td>
+        <td>
+            <input (ngModelChange)="calculateResults()" min="0" class="small" type="number" [(ngModel)]="player.result">
+            (
+                @if (player.result - player.goal > 0) {
+                    <span>+</span>
+                }
+                {{player.result - player.goal}}
+            )
+        </td>
+    </tr>
+}
+    </tbody>
+    <tfoot>
+        <tr>
+        <th [colSpan]="3">Totaal</th>
+        <th>€{{totals.underVpl}}<br>€{{totalsTaxed.underVpl}}</th>
+        <th>€{{totals.underPerFive}}<br>€{{totalsTaxed.underPerFive}}</th>
+        <th>€{{totals.underVw}}<br>€{{totalsTaxed.underVw}}</th>
+        <th>€{{totals.underZero}}<br>€{{totalsTaxed.underZero}}</th>
+        <th>€{{totals.underMinusOne}}<br>€{{totalsTaxed.underMinusOne}}</th>
+        <th>€{{totals.underMinusTwo}}<br>€{{totalsTaxed.underMinusTwo}}</th>
+        <th>€{{totals.underMinusThree}}<br>€{{totalsTaxed.underMinusThree}}</th>
+        <th>€{{totals.underBuffet}}<br>€{{totalsTaxed.underBuffet}}</th>
+        <th>€{{totals.overVpl}}<br>€{{totalsTaxed.overVpl}}</th>
+        <th>€{{totals.overPerFive}}<br>€{{totalsTaxed.overPerFive}}</th>
+        <th>€{{totals.overVw}}<br>€{{totalsTaxed.overVw}}</th>
+        <th>€{{totals.overPlusOne}}<br>€{{totalsTaxed.overPlusOne}}</th>
+        <th>€{{totals.overPlusTwo}}<br>€{{totalsTaxed.overPlusTwo}}</th>
+        <th>€{{totals.overPlusThree}}<br>€{{totalsTaxed.overPlusThree}}</th>
+        <th>€{{totals.overBuffet}}<br>€{{totalsTaxed.overBuffet}}</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th [colSpan]="12">Onderzang</th>
+        </tr>
+    </thead>
+    <tr>
+        <th>Res.</th>
+        <th>Loge</th>
+        <th>Naam</th>
+        <th>VPL<br>€{{prices.underVpl}}</th>
+        <th>Per 5<br>€{{prices.underPerFive}}</th>
+        <th>VW<br>€{{prices.underVw}}</th>
+        <th>0<br>€{{prices.underZero}}</th>
+        <th>-1<br>€{{prices.underMinusOne}}</th>
+        <th>-2<br>€{{prices.underMinusTwo}}</th>
+        <th>-3<br>€{{prices.underMinusThree}}</th>
+        <th>Buffet<br>€{{prices.underBuffet}}</th>
+        <th>Totaal</th>
+    </tr>
+    @for (result of underResults; track $index) {
+    <tr>
+        <td>
+            @if (result.player.result - result.player.goal > 0) {
+                <span>+</span>
+            }
+            {{result.player.result - result.player.goal}}</td>
+        <td>{{result.player.id}}</td>
+        <td>{{result.player.name}}</td>
+        <td>
+            @if (result.underVpl > 0) {
+                €{{result.underVpl}} (€{{result.underVpl * (1 - tax.underVpl)}})
+            }
+        </td>
+        <td>
+            @if (result.underPerFive > 0) {
+                €{{result.underPerFive}} (€{{result.underPerFive * (1 - tax.underPerFive)}})
+            }
+        </td>
+        <td>
+            @if (result.underVw > 0) {
+                €{{result.underVw}} (€{{result.underVw * (1 - tax.underVw)}})
+            }
+        </td>
+        <td>
+            @if (result.underZero > 0) {
+                €{{result.underZero}} (€{{result.underZero * (1 - tax.underZero)}})
+            }
+        </td>
+        <td>
+            @if (result.underMinusOne > 0) {
+                €{{result.underMinusOne}} (€{{result.underMinusOne * (1 - tax.underMinusOne)}})
+            }
+        </td>
+        <td>
+            @if (result.underMinusTwo > 0) {
+                €{{result.underMinusTwo}} (€{{result.underMinusTwo * (1 - tax.underMinusTwo)}})
+            }
+        </td>
+        <td>
+            @if (result.underMinusThree > 0) {
+                €{{result.underMinusThree}} (€{{result.underMinusThree * (1 - tax.underMinusThree)}})
+            }
+        </td>
+        <td>
+            @if (result.underBuffet > 0) {
+                €{{result.underBuffet}} (€{{result.underBuffet * (1 - tax.underBuffet)}})
+            }
+        </td>
+        <td>{{getResultTotal(result)}}</td>
+    </tr>
+}
+</table>
+
+
+<table>
+    <thead>
+        <tr>
+            <th [colSpan]="11">Overzang</th>
+        </tr>
+    </thead>
+    <tr>
+        <th>Res.</th>
+        <th>Loge</th>
+        <th>Naam</th>
+        <th>VPL<br>€{{prices.overVpl}}</th>
+        <th>Per 5<br>€{{prices.overPerFive}}</th>
+        <th>VW<br>€{{prices.overVw}}</th>
+        <th>+1<br>€{{prices.overPlusOne}}</th>
+        <th>+2<br>€{{prices.overPlusTwo}}</th>
+        <th>+3<br>€{{prices.overPlusThree}}</th>
+        <th>Buffet<br>€{{prices.overBuffet}}</th>
+        <th>Totaal</th>
+    </tr>
+    @for (result of overResults; track $index) {
+    <tr>
+        <td>
+            @if (result.player.result - result.player.goal > 0) {
+                <span>+</span>
+            }
+            {{result.player.result - result.player.goal}}</td>
+        <td>{{result.player.id}}</td>
+        <td>{{result.player.name}}</td>
+        <td>
+            @if (result.overVpl > 0) {
+                €{{result.overVpl}} (€{{result.overVpl * (1 - tax.overVpl)}})
+            }
+        </td>
+        <td>
+            @if (result.overPerFive > 0) {
+                €{{result.overPerFive}} (€{{result.overPerFive * (1 - tax.overPerFive)}})
+            }
+        </td>
+        <td>
+            @if (result.overVw > 0) {
+                €{{result.overVw}} (€{{result.overVw * (1 - tax.overVw)}})
+            }
+        </td>
+        <td>
+            @if (result.overPlusOne > 0) {
+                €{{result.overPlusOne}} (€{{result.overPlusOne * (1 - tax.overPlusOne)}})
+            }
+        </td>
+        <td>
+            @if (result.overPlusTwo > 0) {
+                €{{result.overPlusTwo}} (€{{result.overPlusTwo * (1 - tax.overPlusTwo)}})
+            }
+        </td>
+        <td>
+            @if (result.overPlusThree > 0) {
+                €{{result.overPlusThree}} (€{{result.overPlusThree * (1 - tax.overPlusThree)}})
+            }
+        </td>
+        <td>
+            @if (result.overBuffet > 0) {
+                €{{result.overBuffet}} (€{{result.overBuffet * (1 - tax.overBuffet)}})
+            }
+        </td>
+        <td>{{getResultTotal(result)}}</td>
+    </tr>
+}
+</table>

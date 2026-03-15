@@ -1,0 +1,37 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(150, 212, 212, 0.4);
+}
+
+th:nth-child(even),td:nth-child(even) {
+  background-color: rgba(150, 212, 212, 0.4);
+}
+
+th {
+  text-align: center;
+}
+
+table {
+  margin: 16px;
+  width: calc(100% - 32px);
+
+}
+
+.small {
+  width: 60px;
+}
+
+th, td { background: #fff;  }
+.tableFixHead {
+  overflow: auto;
+  height: calc(100vh - 200px);
+}
+
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+}
