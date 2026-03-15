@@ -23,7 +23,7 @@ RUN npm run build -- --configuration ${configuration} --output-path=./dist/out
 FROM nginx:1.29.6
 
 # 9 - Copy the build output to the nginx-container
-COPY --from=build-stage /app/dist/out/ /usr/share/nginx/html
+COPY --from=build-stage /app/dist/out/browser /usr/share/nginx/html
 
 # 10 - Copy the default.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
