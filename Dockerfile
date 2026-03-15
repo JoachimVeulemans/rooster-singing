@@ -1,5 +1,5 @@
 # 1 - Define base image & tag it as build-stage
-FROM node:18.19.0 AS build-stage
+FROM node:24.14.0 AS build-stage
 
 # 2 - Change working directory
 WORKDIR /app
@@ -20,7 +20,7 @@ ARG configuration=rooster-singing
 RUN npm run build -- --configuration ${configuration} --output-path=./dist/out
 
 # 8 - Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.25.3
+FROM nginx:1.29.6
 
 # 9 - Copy the build output to the nginx-container
 COPY --from=build-stage /app/dist/out/ /usr/share/nginx/html

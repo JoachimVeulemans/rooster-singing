@@ -12,7 +12,7 @@ steps:
             command: 'build'
             Dockerfile: 'Dockerfile'
             tags: latest
-            arguments: '--build-arg configuration=production'
+            arguments: '--build-arg configuration=rooster-singing'
 
     -   task: Docker@2
         displayName: 'Push'
