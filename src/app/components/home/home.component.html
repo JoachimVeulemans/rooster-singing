@@ -1,9 +1,81 @@
-<button (click)="numberOfPlayersWanted = numberOfPlayersWanted - 1; setPlayers(); calculateResults()">-</button>
-<input type="number" [(ngModel)]="numberOfPlayersWanted" (ngModelChange)="setPlayers(); calculateResults()">
-<button (click)="numberOfPlayersWanted = numberOfPlayersWanted + 1; setPlayers(); calculateResults()">+</button>
-<button (click)="savePlayers()">Opslaan</button>
+<div class="hide-print m-16">
+    Aantal deelnemers: <input type="number" [(ngModel)]="numberOfPlayersWanted" (ngModelChange)="setPlayers(); calculateResults()">
+    <br>Acties: <button class="mr-5" (click)="saveData()">Opslaan</button>
+    <button class="mr-5" (click)="downloadData()">Downloaden</button>
+    <button class="mr-5" (click)="print()">Afdrukken</button>
+    <button class="mr-5" (click)="reset()">Opnieuw starten</button>
+    <br>Importeren: <input (change)="importData($event)" type="file">
+</div>
 
-<div class="tableFixHead">
+<div class="hide-print">
+<table>
+    <thead>
+    <tr>
+        <th [colSpan]="1"></th>
+        <th [colSpan]="8">Onderzang</th>
+        <th [colSpan]="7">Overzang</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th>VPL</th>
+        <th>Per 5</th>
+        <th>VW</th>
+        <th>0</th>
+        <th>-1</th>
+        <th>-2</th>
+        <th>-3</th>
+        <th>Buffet</th>
+        <th>Vpl</th>
+        <th>Per 5</th>
+        <th>VW</th>
+        <th>+1</th>
+        <th>+2</th>
+        <th>+3</th>
+        <th>Buffet</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr class="price-input">
+            <td>Prijzen</td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underVpl"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underPerFive"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underVw"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underZero"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underMinusOne"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underMinusTwo"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underMinusThree"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.underBuffet"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overVpl"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overPerFive"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overVw"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overPlusOne"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overPlusTwo"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overPlusThree"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="prices.overBuffet"></td>
+        </tr>
+        <tr class="price-input">
+            <td>Tax</td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underVpl"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underPerFive"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underVw"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underZero"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underMinusOne"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underMinusTwo"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underMinusThree"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.underBuffet"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overVpl"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overPerFive"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overVw"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overPlusOne"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overPlusTwo"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overPlusThree"></td>
+            <td><input type="number" (ngModelChange)="calculateResults()" [(ngModel)]="tax.overBuffet"></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<div class="tableFixHead hide-print">
 <table>
     <thead>
     <tr>
@@ -109,7 +181,7 @@
 </table>
 </div>
 
-<table>
+<table class="page">
     <thead>
         <tr>
             <th [colSpan]="12">Onderzang</th>
@@ -130,7 +202,7 @@
         <th>Totaal</th>
     </tr>
     @for (result of underResults; track $index) {
-    <tr>
+    <tr class="center">
         <td>
             @if (result.player.result - result.player.goal > 0) {
                 <span>+</span>
@@ -183,8 +255,7 @@
 }
 </table>
 
-
-<table>
+<table class="page">
     <thead>
         <tr>
             <th [colSpan]="11">Overzang</th>
@@ -204,7 +275,7 @@
         <th>Totaal</th>
     </tr>
     @for (result of overResults; track $index) {
-    <tr>
+    <tr class="center">
         <td>
             @if (result.player.result - result.player.goal > 0) {
                 <span>+</span>

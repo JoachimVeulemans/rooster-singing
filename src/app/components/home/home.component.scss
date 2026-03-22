@@ -18,7 +18,14 @@ th {
 table {
   margin: 16px;
   width: calc(100% - 32px);
+}
 
+.m-16 {
+  margin: 16px;
+}
+
+.mr-5 {
+  margin-right: 5px;
 }
 
 .small {
@@ -34,4 +41,21 @@ th, td { background: #fff;  }
 .tableFixHead thead th {
   position: sticky;
   top: 0;
+}
+
+@media print {
+  .hide-print {
+    display: none !important;
+  }
+  .page {
+    break-after: page;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.price-input input {
+  width: 50px;
 }

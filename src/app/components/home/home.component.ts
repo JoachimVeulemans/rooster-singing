@@ -32,7 +32,41 @@ export class HomeComponent implements OnInit{
         overPlusThree: 1,
         overBuffet: 1.5
     }
+    public standardPrices = {
+        underVpl: 1,
+        underPerFive: 1,
+        underVw: 1,
+        underZero: 1,
+        underMinusOne: 1,
+        underMinusTwo: 1,
+        underMinusThree: 1,
+        underBuffet: 3,
+        overVpl: 0.5,
+        overPerFive: 0.5,
+        overVw: 0.5,
+        overPlusOne: 1,
+        overPlusTwo: 1,
+        overPlusThree: 1,
+        overBuffet: 1.5
+    }
     public tax = {
+        underVpl: 0.1,
+        underPerFive: 0.1,
+        underVw: 0.1,
+        underZero: 0.1,
+        underMinusOne: 0.1,
+        underMinusTwo: 0.1,
+        underMinusThree: 0.1,
+        underBuffet: 0,
+        overVpl: 0.1,
+        overPerFive: 0.1,
+        overVw: 0.1,
+        overPlusOne: 0.1,
+        overPlusTwo: 0.1,
+        overPlusThree: 0.1,
+        overBuffet: 0
+    }
+    public standardTax = {
         underVpl: 0.1,
         underPerFive: 0.1,
         underVw: 0.1,
@@ -88,9 +122,9 @@ export class HomeComponent implements OnInit{
 
     ngOnInit() {
         this.setPlayers();
-        const backup = localStorage.getItem('players');
+        const backup = localStorage.getItem('data');
         if (backup) {
-            this.loadPlayers(JSON.parse(backup));
+            this.loadData(JSON.parse(backup));
         }
     }
 
@@ -195,6 +229,7 @@ export class HomeComponent implements OnInit{
         let underMinusTwo = this.totals.underMinusTwo;
         let underMinusThree = this.totals.underMinusThree;
         let underBuffet = this.totals.underBuffet;
+        let underBuffetRunCycle = 0;
 
         Object.keys(underPlayers).sort((a, b) => parseInt(b) - parseInt(a)).forEach((k) => {
             const players = underPlayers[k];
@@ -219,8 +254,10 @@ export class HomeComponent implements OnInit{
             }
             if (underVw > 0) {
                 const participatingPlayers = players.filter(p => p.underVw).length;
-                underVwPP = (underVw - (this.prices.underVw * 5 * participatingPlayers) >= 0) ? this.prices.underVw * 5 : underVw / participatingPlayers;
-                underVw -= underVwPP * participatingPlayers;
+                if (participatingPlayers > 0) {
+                    underVwPP = this.totals.underVw / participatingPlayers;
+                    underVw -= this.totals.underVw;
+                }
             }
             if (underZero > 0) {
                 const participatingPlayers = players.filter(p => p.underZero).length;
@@ -238,22 +275,28 @@ export class HomeComponent implements OnInit{
             }
             if (underMinusTwo > 0 && parseInt(k) < -1) {
                 const participatingPlayers = players.filter(p => p.underMinusTwo).length;
-                if (participatingPlayers > 0) {
+                if (participatingPlayers > 0 && underMinusOnePP === 0) {
                     underMinusTwoPP = this.totals.underMinusTwo / participatingPlayers;
                     underMinusTwo -= this.totals.underMinusTwo;
                 }
             }
             if (underMinusThree > 0 && parseInt(k) < -2) {
                 const participatingPlayers = players.filter(p => p.underMinusThree).length;
-                if (participatingPlayers > 0) {
+                if (participatingPlayers > 0 && underMinusOnePP === 0 && underMinusTwoPP === 0) {
                     underMinusThreePP = this.totals.underMinusThree / participatingPlayers;
                     underMinusThree -= this.totals.underMinusThree;
                 }
             }
             if (underBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.underBuffet).length;
-                underBuffetPP = (underBuffet - (this.prices.underBuffet * 5 * participatingPlayers) >= 0) ? this.prices.underBuffet * 5 : underBuffet / participatingPlayers;
-                underBuffet -= underBuffetPP * participatingPlayers;
+                if (participatingPlayers > 0) {
+                    let division = 2;
+                    if (underBuffetRunCycle === 1) division = 3;
+                    if (underBuffetRunCycle === 2) division = 6;
+                    underBuffetRunCycle++;
+                    underBuffetPP = (this.totals.underBuffet / division) / participatingPlayers;
+                    underBuffet -= underBuffetPP * participatingPlayers;
+                }
             }
 
             players.forEach((p) => {
@@ -284,6 +327,7 @@ export class HomeComponent implements OnInit{
         let overPlusTwo = this.totals.overPlusTwo;
         let overPlusThree = this.totals.overPlusThree;
         let overBuffet = this.totals.overBuffet;
+        let overBuffetRunCycle = 0;
 
         Object.keys(overPlayers).sort((a, b) => parseInt(a) - parseInt(b)).forEach((k) => {
             const players = overPlayers[k];
@@ -306,10 +350,12 @@ export class HomeComponent implements OnInit{
                 overPerFivePP = (overPerFive - (this.prices.overPerFive * 5 * participatingPlayers) >= 0) ? this.prices.overPerFive * 5 : overPerFive / participatingPlayers;
                 overPerFive -= overPerFivePP * participatingPlayers;
             }
-            if (overVw > 0) {
+            if (overVw > 0 && parseInt(k) > 0) {
                 const participatingPlayers = players.filter(p => p.overVw).length;
-                overVwPP = (overVw - (this.prices.overVw * 5 * participatingPlayers) >= 0) ? this.prices.overVw * 5 : overVw / participatingPlayers;
-                overVw -= overVwPP * participatingPlayers;
+                if (participatingPlayers > 0) {
+                    overVwPP = this.totals.overVw / participatingPlayers;
+                    overVw -= this.totals.overVw;
+                }
             }
             if (overPlusOne > 0 && parseInt(k) > 0) {
                 const participatingPlayers = players.filter(p => p.overPlusOne).length;
@@ -320,22 +366,27 @@ export class HomeComponent implements OnInit{
             }
             if (overPlusTwo > 0 && parseInt(k) > 1) {
                 const participatingPlayers = players.filter(p => p.overPlusTwo).length;
-                if (participatingPlayers > 0) {
+                if (participatingPlayers > 0 && overPlusOnePP === 0) {
                     overPlusTwoPP = this.totals.overPlusTwo / participatingPlayers;
                     overPlusTwo -= this.totals.overPlusTwo;
                 }
             }
             if (overPlusThree > 0 && parseInt(k) > 2) {
                 const participatingPlayers = players.filter(p => p.overPlusThree).length;
-                if (participatingPlayers > 0) {
+                if (participatingPlayers > 0 && overPlusOnePP === 0 && overPlusTwoPP === 0) {
                     overPlusThreePP = this.totals.overPlusThree / participatingPlayers;
                     overPlusThree -= this.totals.overPlusThree;
                 }
             }
             if (overBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.overBuffet).length;
-                overBuffetPP = (overBuffet - (this.prices.overBuffet * 5 * participatingPlayers) >= 0) ? this.prices.overBuffet * 5 : overBuffet / participatingPlayers;
-                overBuffet -= overBuffetPP * participatingPlayers;
+                if (participatingPlayers > 0) {
+                    let division = 1.5;
+                    if (overBuffetRunCycle === 1) division = 3;
+                    overBuffetRunCycle++;
+                    overBuffetPP = (this.totals.overBuffet / division) / participatingPlayers;
+                    overBuffet -= overBuffetPP * participatingPlayers;
+                }
             }
 
             players.forEach((p) => {
@@ -362,14 +413,55 @@ export class HomeComponent implements OnInit{
         }, 500);
     }
 
-    private loadPlayers(players: Player[]) {
-        this.players = players.map(p => new Player(p));
+    importData(event: Event) {
+        const input = event.target as HTMLInputElement;
+
+        if (!input.files || input.files.length === 0) return;
+
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const content = reader.result as string;
+            this.loadData(JSON.parse(content));
+        };
+
+        reader.readAsText(file);
+    }
+
+    private loadData(data: any) {
+        HomeComponent.prices = data.prices;
+        this.tax = data.tax;
+        this.players = data.players.map((p: any) => new Player(p));
         this.numberOfPlayersWanted = this.players.length;
         this.calculateResults();
     }
 
-    savePlayers() {
-        localStorage.setItem('players', JSON.stringify(this.players.map(p => p.toDocument())));
+    saveData() {
+        const data = {
+            prices: this.prices,
+            tax: this.tax,
+            players: this.players.map(p => p.toDocument())
+        };
+
+        localStorage.setItem('data', JSON.stringify(data));
+
+        return data;
+    }
+
+    downloadData() {
+        const data = this.saveData();
+
+        const jsonStr = JSON.stringify(data, null, 2); // pretty print
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Puntentelling.json';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
     }
 
     getResultTotal(result: Result): string {
@@ -403,9 +495,20 @@ export class HomeComponent implements OnInit{
         totalTaxed += result.overPlusTwo * (1 - this.tax.overPlusTwo);
         total += result.overPlusThree;
         totalTaxed += result.overPlusThree * (1 - this.tax.overPlusThree);
-
-        const balance = Math.round((totalTaxed - this.getTotalAmount(result.player)) * 100) / 100;
         
-        return `€${total} ==> €${totalTaxed} <== (${balance >= 0 ? '+€' + balance : '€' + balance})`;
+        return `€${total} (€${totalTaxed})`;
+    }
+
+    print() {
+        window.print();
+    }
+
+    reset() {
+        this.players = [];
+        this.numberOfPlayersWanted = 50;
+        HomeComponent.prices = this.standardPrices;
+        this.tax = this.standardTax;
+        this.setPlayers();
+        this.calculateResults();
     }
 }
