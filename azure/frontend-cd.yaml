@@ -3,6 +3,9 @@
 trigger:
     - main
 
+pool:
+    name: jvjkonubupm01
+
 steps:
     -   task: Docker@2
         displayName: 'Build'
