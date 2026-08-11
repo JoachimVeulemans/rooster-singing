@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Player} from "../../data/model/player.model";
 import {FormsModule} from "@angular/forms";
 import {Result} from "../../data/model/result.model";
@@ -9,6 +9,7 @@ import {Result} from "../../data/model/result.model";
         FormsModule
     ],
     templateUrl: './home.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
