@@ -212,42 +212,42 @@
         <td>{{result.player.name}}</td>
         <td>
             @if (result.underVpl > 0) {
-                €{{result.underVpl}} (€{{result.underVpl * (1 - tax.underVpl)}})
+                €{{result.underVpl * (1 - tax.underVpl)}}
             }
         </td>
         <td>
             @if (result.underPerFive > 0) {
-                €{{result.underPerFive}} (€{{result.underPerFive * (1 - tax.underPerFive)}})
+                €{{result.underPerFive * (1 - tax.underPerFive)}}
             }
         </td>
         <td>
             @if (result.underVw > 0) {
-                €{{result.underVw}} (€{{result.underVw * (1 - tax.underVw)}})
+                €{{result.underVw * (1 - tax.underVw)}}
             }
         </td>
         <td>
             @if (result.underZero > 0) {
-                €{{result.underZero}} (€{{result.underZero * (1 - tax.underZero)}})
+                €{{result.underZero * (1 - tax.underZero)}}
             }
         </td>
         <td>
             @if (result.underMinusOne > 0) {
-                €{{result.underMinusOne}} (€{{result.underMinusOne * (1 - tax.underMinusOne)}})
+                €{{result.underMinusOne * (1 - tax.underMinusOne)}}
             }
         </td>
         <td>
             @if (result.underMinusTwo > 0) {
-                €{{result.underMinusTwo}} (€{{result.underMinusTwo * (1 - tax.underMinusTwo)}})
+                €{{result.underMinusTwo * (1 - tax.underMinusTwo)}}
             }
         </td>
         <td>
             @if (result.underMinusThree > 0) {
-                €{{result.underMinusThree}} (€{{result.underMinusThree * (1 - tax.underMinusThree)}})
+                €{{result.underMinusThree * (1 - tax.underMinusThree)}}
             }
         </td>
         <td>
             @if (result.underBuffet > 0) {
-                €{{result.underBuffet}} (€{{result.underBuffet * (1 - tax.underBuffet)}})
+                €{{result.underBuffet * (1 - tax.underBuffet)}}
             }
         </td>
         <td>{{getResultTotal(result)}}</td>
@@ -285,37 +285,37 @@
         <td>{{result.player.name}}</td>
         <td>
             @if (result.overVpl > 0) {
-                €{{result.overVpl}} (€{{result.overVpl * (1 - tax.overVpl)}})
+                €{{result.overVpl * (1 - tax.overVpl)}}
             }
         </td>
         <td>
             @if (result.overPerFive > 0) {
-                €{{result.overPerFive}} (€{{result.overPerFive * (1 - tax.overPerFive)}})
+                €{{result.overPerFive * (1 - tax.overPerFive)}}
             }
         </td>
         <td>
             @if (result.overVw > 0) {
-                €{{result.overVw}} (€{{result.overVw * (1 - tax.overVw)}})
+                €{{result.overVw * (1 - tax.overVw)}}
             }
         </td>
         <td>
             @if (result.overPlusOne > 0) {
-                €{{result.overPlusOne}} (€{{result.overPlusOne * (1 - tax.overPlusOne)}})
+                €{{result.overPlusOne * (1 - tax.overPlusOne)}}
             }
         </td>
         <td>
             @if (result.overPlusTwo > 0) {
-                €{{result.overPlusTwo}} (€{{result.overPlusTwo * (1 - tax.overPlusTwo)}})
+                €{{result.overPlusTwo * (1 - tax.overPlusTwo)}}
             }
         </td>
         <td>
             @if (result.overPlusThree > 0) {
-                €{{result.overPlusThree}} (€{{result.overPlusThree * (1 - tax.overPlusThree)}})
+                €{{result.overPlusThree * (1 - tax.overPlusThree)}}
             }
         </td>
         <td>
             @if (result.overBuffet > 0) {
-                €{{result.overBuffet}} (€{{result.overBuffet * (1 - tax.overBuffet)}})
+                €{{result.overBuffet * (1 - tax.overBuffet)}}
             }
         </td>
         <td>{{getResultTotal(result)}}</td>

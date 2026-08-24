@@ -497,7 +497,7 @@ export class HomeComponent implements OnInit{
         total += result.overPlusThree;
         totalTaxed += result.overPlusThree * (1 - this.tax.overPlusThree);
         
-        return `€${total} (€${totalTaxed})`;
+        return `€${totalTaxed.toFixed(2)}`;
     }
 
     print() {
