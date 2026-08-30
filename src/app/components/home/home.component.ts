@@ -225,6 +225,7 @@ export class HomeComponent implements OnInit{
     private calculateUnderResults() {
         this.underResults = [];
         const underPlayers = this.players.filter(p => p.result - p.goal <= 0 && p.result !== 0).groupBy(p => p.result - p.goal);
+        const totalUnderBuffetWaves = Object.values(underPlayers).filter(group => group.some(p => p.underBuffet)).length;
 
         let underVpl = this.totals.underVpl;
         let underPerFive = this.totals.underPerFive;
@@ -279,15 +280,15 @@ export class HomeComponent implements OnInit{
                 }
             }
             if (underMinusTwo > 0 && parseInt(k) < -1) {
-                const participatingPlayers = players.filter(p => p.underMinusTwo).length;
-                if (participatingPlayers > 0 && underMinusOnePP === 0) {
+                const participatingPlayers = players.filter(p => p.underMinusTwo && !p.underMinusOne).length;
+                if (participatingPlayers > 0) {
                     underMinusTwoPP = this.totals.underMinusTwo / participatingPlayers;
                     underMinusTwo -= this.totals.underMinusTwo;
                 }
             }
             if (underMinusThree > 0 && parseInt(k) < -2) {
-                const participatingPlayers = players.filter(p => p.underMinusThree).length;
-                if (participatingPlayers > 0 && underMinusOnePP === 0 && underMinusTwoPP === 0) {
+                const participatingPlayers = players.filter(p => p.underMinusThree && !p.underMinusOne && !p.underMinusTwo).length;
+                if (participatingPlayers > 0) {
                     underMinusThreePP = this.totals.underMinusThree / participatingPlayers;
                     underMinusThree -= this.totals.underMinusThree;
                 }
@@ -295,11 +296,18 @@ export class HomeComponent implements OnInit{
             if (underBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.underBuffet).length;
                 if (participatingPlayers > 0) {
-                    let division = 2;
-                    if (underBuffetRunCycle === 1) division = 3;
-                    if (underBuffetRunCycle === 2) division = 6;
+                    const isLastWave = underBuffetRunCycle === totalUnderBuffetWaves - 1;
+                    let share: number;
+                    if (isLastWave) {
+                        share = underBuffet;
+                    } else {
+                        let division = 2;
+                        if (underBuffetRunCycle === 1) division = 3;
+                        if (underBuffetRunCycle === 2) division = 6;
+                        share = this.totals.underBuffet / division;
+                    }
                     underBuffetRunCycle++;
-                    underBuffetPP = (this.totals.underBuffet / division) / participatingPlayers;
+                    underBuffetPP = share / participatingPlayers;
                     underBuffet -= underBuffetPP * participatingPlayers;
                 }
             }
@@ -313,8 +321,8 @@ export class HomeComponent implements OnInit{
                         underVw: p.underVw ? Math.round(underVwPP * 100) / 100 : 0,
                         underZero: p.underZero ? Math.round(underZeroPP * 100) / 100 : 0,
                         underMinusOne: p.underMinusOne ? Math.round(underMinusOnePP * 100) / 100 : 0,
-                        underMinusTwo: p.underMinusTwo ? Math.round(underMinusTwoPP * 100) / 100 : 0,
-                        underMinusThree: p.underMinusThree ? Math.round(underMinusThreePP * 100) / 100 : 0,
+                        underMinusTwo: (p.underMinusTwo && !p.underMinusOne) ? Math.round(underMinusTwoPP * 100) / 100 : 0,
+                        underMinusThree: (p.underMinusThree && !p.underMinusOne && !p.underMinusTwo) ? Math.round(underMinusThreePP * 100) / 100 : 0,
                         underBuffet: p.underBuffet ? Math.round(underBuffetPP * 100) / 100 : 0,
                     }));
             });
@@ -324,6 +332,7 @@ export class HomeComponent implements OnInit{
         private calculateOverResults() {
         this.overResults = [];
         const overPlayers = this.players.filter(p => p.result - p.goal > 0 && p.result !== 0).groupBy(p => p.result - p.goal);
+        const totalOverBuffetWaves = Object.values(overPlayers).filter(group => group.some(p => p.overBuffet)).length;
 
         let overVpl = this.totals.overVpl;
         let overPerFive = this.totals.overPerFive;
@@ -370,15 +379,15 @@ export class HomeComponent implements OnInit{
                 }
             }
             if (overPlusTwo > 0 && parseInt(k) > 1) {
-                const participatingPlayers = players.filter(p => p.overPlusTwo).length;
-                if (participatingPlayers > 0 && overPlusOnePP === 0) {
+                const participatingPlayers = players.filter(p => p.overPlusTwo && !p.overPlusOne).length;
+                if (participatingPlayers > 0) {
                     overPlusTwoPP = this.totals.overPlusTwo / participatingPlayers;
                     overPlusTwo -= this.totals.overPlusTwo;
                 }
             }
             if (overPlusThree > 0 && parseInt(k) > 2) {
-                const participatingPlayers = players.filter(p => p.overPlusThree).length;
-                if (participatingPlayers > 0 && overPlusOnePP === 0 && overPlusTwoPP === 0) {
+                const participatingPlayers = players.filter(p => p.overPlusThree && !p.overPlusOne && !p.overPlusTwo).length;
+                if (participatingPlayers > 0) {
                     overPlusThreePP = this.totals.overPlusThree / participatingPlayers;
                     overPlusThree -= this.totals.overPlusThree;
                 }
@@ -386,10 +395,17 @@ export class HomeComponent implements OnInit{
             if (overBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.overBuffet).length;
                 if (participatingPlayers > 0) {
-                    let division = 1.5;
-                    if (overBuffetRunCycle === 1) division = 3;
+                    const isLastWave = overBuffetRunCycle === totalOverBuffetWaves - 1;
+                    let share: number;
+                    if (isLastWave) {
+                        share = overBuffet;
+                    } else {
+                        let division = 1.5;
+                        if (overBuffetRunCycle === 1) division = 3;
+                        share = this.totals.overBuffet / division;
+                    }
                     overBuffetRunCycle++;
-                    overBuffetPP = (this.totals.overBuffet / division) / participatingPlayers;
+                    overBuffetPP = share / participatingPlayers;
                     overBuffet -= overBuffetPP * participatingPlayers;
                 }
             }
@@ -402,8 +418,8 @@ export class HomeComponent implements OnInit{
                         overPerFive: p.overPerFive ? Math.round(overPerFivePP * 100) / 100 : 0,
                         overVw: p.overVw ? Math.round(overVwPP * 100) / 100 : 0,
                         overPlusOne: p.overPlusOne ? Math.round(overPlusOnePP * 100) / 100 : 0,
-                        overPlusTwo: p.overPlusTwo ? Math.round(overPlusTwoPP * 100) / 100 : 0,
-                        overPlusThree: p.overPlusThree ? Math.round(overPlusThreePP * 100) / 100 : 0,
+                        overPlusTwo: (p.overPlusTwo && !p.overPlusOne) ? Math.round(overPlusTwoPP * 100) / 100 : 0,
+                        overPlusThree: (p.overPlusThree && !p.overPlusOne && !p.overPlusTwo) ? Math.round(overPlusThreePP * 100) / 100 : 0,
                         overBuffet: p.overBuffet ? Math.round(overBuffetPP * 100) / 100 : 0,
                     }));
             });
@@ -477,37 +493,25 @@ export class HomeComponent implements OnInit{
     }
 
     getResultTotal(result: Result): string {
-        let total = 0;
         let totalTaxed = 0;
 
-        total += result.underVpl;
         totalTaxed += result.underVpl * (1 - this.tax.underVpl);
-        total += result.underPerFive;
         totalTaxed += result.underPerFive * (1 - this.tax.underPerFive);
-        total += result.underVw;
         totalTaxed += result.underVw * (1 - this.tax.underVw);
-        total += result.underZero;
         totalTaxed += result.underZero * (1 - this.tax.underZero);
-        total += result.underMinusOne;
         totalTaxed += result.underMinusOne * (1 - this.tax.underMinusOne);
-        total += result.underMinusTwo;
         totalTaxed += result.underMinusTwo * (1 - this.tax.underMinusTwo);
-        total += result.underMinusThree;
         totalTaxed += result.underMinusThree * (1 - this.tax.underMinusThree);
+        totalTaxed += result.underBuffet * (1 - this.tax.underBuffet);
 
-        total += result.overVpl;
         totalTaxed += result.overVpl * (1 - this.tax.overVpl);
-        total += result.overPerFive;
         totalTaxed += result.overPerFive * (1 - this.tax.overPerFive);
-        total += result.overVw;
         totalTaxed += result.overVw * (1 - this.tax.overVw);
-        total += result.overPlusOne;
         totalTaxed += result.overPlusOne * (1 - this.tax.overPlusOne);
-        total += result.overPlusTwo;
         totalTaxed += result.overPlusTwo * (1 - this.tax.overPlusTwo);
-        total += result.overPlusThree;
         totalTaxed += result.overPlusThree * (1 - this.tax.overPlusThree);
-        
+        totalTaxed += result.overBuffet * (1 - this.tax.overBuffet);
+
         return `€${totalTaxed.toFixed(2)}`;
     }
 
