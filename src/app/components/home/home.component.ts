@@ -125,7 +125,11 @@ export class HomeComponent implements OnInit{
         this.setPlayers();
         const backup = localStorage.getItem('data');
         if (backup) {
-            this.loadData(JSON.parse(backup));
+            try {
+                this.loadData(JSON.parse(backup));
+            } catch {
+                alert('De opgeslagen gegevens konden niet worden geladen en zijn genegeerd.');
+            }
         }
     }
 
@@ -220,7 +224,7 @@ export class HomeComponent implements OnInit{
 
     private calculateUnderResults() {
         this.underResults = [];
-        const underPlayers = this.players.filter(p => p.result - p.goal <= 0 && p.result !== 0).sortBy(p => p.result - p.goal).groupBy(p => p.result - p.goal);
+        const underPlayers = this.players.filter(p => p.result - p.goal <= 0 && p.result !== 0).groupBy(p => p.result - p.goal);
 
         let underVpl = this.totals.underVpl;
         let underPerFive = this.totals.underPerFive;
@@ -319,7 +323,7 @@ export class HomeComponent implements OnInit{
 
         private calculateOverResults() {
         this.overResults = [];
-        const overPlayers = this.players.filter(p => p.result - p.goal > 0 && p.result !== 0).sortBy(p => p.result - p.goal).groupBy(p => p.result - p.goal);
+        const overPlayers = this.players.filter(p => p.result - p.goal > 0 && p.result !== 0).groupBy(p => p.result - p.goal);
 
         let overVpl = this.totals.overVpl;
         let overPerFive = this.totals.overPerFive;
@@ -407,11 +411,9 @@ export class HomeComponent implements OnInit{
     }
 
     protected calculateResults() {
-        setTimeout(() => {
-            this.calculateTotals();
-            this.calculateUnderResults();
-            this.calculateOverResults();
-        }, 500);
+        this.calculateTotals();
+        this.calculateUnderResults();
+        this.calculateOverResults();
     }
 
     importData(event: Event) {
@@ -424,7 +426,11 @@ export class HomeComponent implements OnInit{
 
         reader.onload = () => {
             const content = reader.result as string;
-            this.loadData(JSON.parse(content));
+            try {
+                this.loadData(JSON.parse(content));
+            } catch {
+                alert('Het bestand kon niet worden geïmporteerd: ongeldig formaat.');
+            }
         };
 
         reader.readAsText(file);
@@ -456,10 +462,15 @@ export class HomeComponent implements OnInit{
         const jsonStr = JSON.stringify(data, null, 2); // pretty print
         const blob = new Blob([jsonStr], { type: 'application/json' });
 
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'Puntentelling.json';
+        a.download = `Puntentelling ${day}-${month}-${year}.json`;
         a.click();
 
         window.URL.revokeObjectURL(url);
@@ -507,8 +518,8 @@ export class HomeComponent implements OnInit{
     reset() {
         this.players = [];
         this.numberOfPlayersWanted = 50;
-        HomeComponent.prices = this.standardPrices;
-        this.tax = this.standardTax;
+        HomeComponent.prices = {...this.standardPrices};
+        this.tax = {...this.standardTax};
         this.setPlayers();
         this.calculateResults();
     }

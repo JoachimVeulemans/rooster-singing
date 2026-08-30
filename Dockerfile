@@ -1,5 +1,5 @@
 # 1 - Define base image & tag it as build-stage
-FROM node:26.7.0 AS build-stage
+FROM node:26.8.1 AS build-stage
 
 # 2 - Change working directory
 WORKDIR /app
