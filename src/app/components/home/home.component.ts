@@ -225,7 +225,6 @@ export class HomeComponent implements OnInit{
     private calculateUnderResults() {
         this.underResults = [];
         const underPlayers = this.players.filter(p => p.result - p.goal <= 0 && p.result !== 0).groupBy(p => p.result - p.goal);
-        const totalUnderBuffetWaves = Object.values(underPlayers).filter(group => group.some(p => p.underBuffet)).length;
 
         let underVpl = this.totals.underVpl;
         let underPerFive = this.totals.underPerFive;
@@ -274,21 +273,21 @@ export class HomeComponent implements OnInit{
             }
             if (underMinusOne > 0 && parseInt(k) < 0) {
                 const participatingPlayers = players.filter(p => p.underMinusOne).length;
-                if (participatingPlayers > 0) {
+                if (participatingPlayers > 0 && underZeroPP === 0) {
                     underMinusOnePP = this.totals.underMinusOne / participatingPlayers;
                     underMinusOne -= this.totals.underMinusOne;
                 }
             }
             if (underMinusTwo > 0 && parseInt(k) < -1) {
-                const participatingPlayers = players.filter(p => p.underMinusTwo && !p.underMinusOne).length;
-                if (participatingPlayers > 0) {
+                const participatingPlayers = players.filter(p => p.underMinusTwo).length;
+                if (participatingPlayers > 0 && underZeroPP === 0 && underMinusOnePP === 0) {
                     underMinusTwoPP = this.totals.underMinusTwo / participatingPlayers;
                     underMinusTwo -= this.totals.underMinusTwo;
                 }
             }
             if (underMinusThree > 0 && parseInt(k) < -2) {
-                const participatingPlayers = players.filter(p => p.underMinusThree && !p.underMinusOne && !p.underMinusTwo).length;
-                if (participatingPlayers > 0) {
+                const participatingPlayers = players.filter(p => p.underMinusThree).length;
+                if (participatingPlayers > 0 && underZeroPP === 0 && underMinusOnePP === 0 && underMinusTwoPP === 0) {
                     underMinusThreePP = this.totals.underMinusThree / participatingPlayers;
                     underMinusThree -= this.totals.underMinusThree;
                 }
@@ -296,18 +295,11 @@ export class HomeComponent implements OnInit{
             if (underBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.underBuffet).length;
                 if (participatingPlayers > 0) {
-                    const isLastWave = underBuffetRunCycle === totalUnderBuffetWaves - 1;
-                    let share: number;
-                    if (isLastWave) {
-                        share = underBuffet;
-                    } else {
-                        let division = 2;
-                        if (underBuffetRunCycle === 1) division = 3;
-                        if (underBuffetRunCycle === 2) division = 6;
-                        share = this.totals.underBuffet / division;
-                    }
+                    let division = 2;
+                    if (underBuffetRunCycle === 1) division = 3;
+                    if (underBuffetRunCycle === 2) division = 6;
                     underBuffetRunCycle++;
-                    underBuffetPP = share / participatingPlayers;
+                    underBuffetPP = (this.totals.underBuffet / division) / participatingPlayers;
                     underBuffet -= underBuffetPP * participatingPlayers;
                 }
             }
@@ -321,8 +313,8 @@ export class HomeComponent implements OnInit{
                         underVw: p.underVw ? Math.round(underVwPP * 100) / 100 : 0,
                         underZero: p.underZero ? Math.round(underZeroPP * 100) / 100 : 0,
                         underMinusOne: p.underMinusOne ? Math.round(underMinusOnePP * 100) / 100 : 0,
-                        underMinusTwo: (p.underMinusTwo && !p.underMinusOne) ? Math.round(underMinusTwoPP * 100) / 100 : 0,
-                        underMinusThree: (p.underMinusThree && !p.underMinusOne && !p.underMinusTwo) ? Math.round(underMinusThreePP * 100) / 100 : 0,
+                        underMinusTwo: p.underMinusTwo ? Math.round(underMinusTwoPP * 100) / 100 : 0,
+                        underMinusThree: p.underMinusThree ? Math.round(underMinusThreePP * 100) / 100 : 0,
                         underBuffet: p.underBuffet ? Math.round(underBuffetPP * 100) / 100 : 0,
                     }));
             });
@@ -332,7 +324,6 @@ export class HomeComponent implements OnInit{
         private calculateOverResults() {
         this.overResults = [];
         const overPlayers = this.players.filter(p => p.result - p.goal > 0 && p.result !== 0).groupBy(p => p.result - p.goal);
-        const totalOverBuffetWaves = Object.values(overPlayers).filter(group => group.some(p => p.overBuffet)).length;
 
         let overVpl = this.totals.overVpl;
         let overPerFive = this.totals.overPerFive;
@@ -379,15 +370,15 @@ export class HomeComponent implements OnInit{
                 }
             }
             if (overPlusTwo > 0 && parseInt(k) > 1) {
-                const participatingPlayers = players.filter(p => p.overPlusTwo && !p.overPlusOne).length;
-                if (participatingPlayers > 0) {
+                const participatingPlayers = players.filter(p => p.overPlusTwo).length;
+                if (participatingPlayers > 0 && overPlusOnePP === 0) {
                     overPlusTwoPP = this.totals.overPlusTwo / participatingPlayers;
                     overPlusTwo -= this.totals.overPlusTwo;
                 }
             }
             if (overPlusThree > 0 && parseInt(k) > 2) {
-                const participatingPlayers = players.filter(p => p.overPlusThree && !p.overPlusOne && !p.overPlusTwo).length;
-                if (participatingPlayers > 0) {
+                const participatingPlayers = players.filter(p => p.overPlusThree).length;
+                if (participatingPlayers > 0 && overPlusOnePP === 0 && overPlusTwoPP === 0) {
                     overPlusThreePP = this.totals.overPlusThree / participatingPlayers;
                     overPlusThree -= this.totals.overPlusThree;
                 }
@@ -395,17 +386,10 @@ export class HomeComponent implements OnInit{
             if (overBuffet > 0) {
                 const participatingPlayers = players.filter(p => p.overBuffet).length;
                 if (participatingPlayers > 0) {
-                    const isLastWave = overBuffetRunCycle === totalOverBuffetWaves - 1;
-                    let share: number;
-                    if (isLastWave) {
-                        share = overBuffet;
-                    } else {
-                        let division = 1.5;
-                        if (overBuffetRunCycle === 1) division = 3;
-                        share = this.totals.overBuffet / division;
-                    }
+                    let division = 1.5;
+                    if (overBuffetRunCycle === 1) division = 3;
                     overBuffetRunCycle++;
-                    overBuffetPP = share / participatingPlayers;
+                    overBuffetPP = (this.totals.overBuffet / division) / participatingPlayers;
                     overBuffet -= overBuffetPP * participatingPlayers;
                 }
             }
@@ -418,8 +402,8 @@ export class HomeComponent implements OnInit{
                         overPerFive: p.overPerFive ? Math.round(overPerFivePP * 100) / 100 : 0,
                         overVw: p.overVw ? Math.round(overVwPP * 100) / 100 : 0,
                         overPlusOne: p.overPlusOne ? Math.round(overPlusOnePP * 100) / 100 : 0,
-                        overPlusTwo: (p.overPlusTwo && !p.overPlusOne) ? Math.round(overPlusTwoPP * 100) / 100 : 0,
-                        overPlusThree: (p.overPlusThree && !p.overPlusOne && !p.overPlusTwo) ? Math.round(overPlusThreePP * 100) / 100 : 0,
+                        overPlusTwo: p.overPlusTwo ? Math.round(overPlusTwoPP * 100) / 100 : 0,
+                        overPlusThree: p.overPlusThree ? Math.round(overPlusThreePP * 100) / 100 : 0,
                         overBuffet: p.overBuffet ? Math.round(overBuffetPP * 100) / 100 : 0,
                     }));
             });
