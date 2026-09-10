@@ -341,4 +341,13 @@ tr.selected td {
     position: static;
     box-shadow: none;
   }
+
+  .summary-table {
+    font-size: 14px;
+  }
+
+  .summary-table th,
+  .summary-table td {
+    padding: 10px 14px;
+  }
 }

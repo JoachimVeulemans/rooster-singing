@@ -99,21 +99,21 @@
         <th></th>
         <th>Loge</th>
         <th>Naam</th>
-        <th>VPL<br>€{{prices.underVpl}}</th>
-        <th>Per 5<br>€{{prices.underPerFive}}</th>
-        <th>VW<br>€{{prices.underVw}}</th>
-        <th>0<br>€{{prices.underZero}}</th>
-        <th>-1<br>€{{prices.underMinusOne}}</th>
-        <th>-2<br>€{{prices.underMinusTwo}}</th>
-        <th>-3<br>€{{prices.underMinusThree}}</th>
-        <th>Buffet<br>€{{prices.underBuffet}}</th>
-        <th>Vpl<br>€{{prices.overVpl}}</th>
-        <th>Per 5<br>€{{prices.overPerFive}}</th>
-        <th>VW<br>€{{prices.overVw}}</th>
-        <th>+1<br>€{{prices.overPlusOne}}</th>
-        <th>+2<br>€{{prices.overPlusTwo}}</th>
-        <th>+3<br>€{{prices.overPlusThree}}</th>
-        <th>Buffet<br>€{{prices.overBuffet}}</th>
+        <th>VPL<br>€{{money(prices.underVpl)}}</th>
+        <th>Per 5<br>€{{money(prices.underPerFive)}}</th>
+        <th>VW<br>€{{money(prices.underVw)}}</th>
+        <th>0<br>€{{money(prices.underZero)}}</th>
+        <th>-1<br>€{{money(prices.underMinusOne)}}</th>
+        <th>-2<br>€{{money(prices.underMinusTwo)}}</th>
+        <th>-3<br>€{{money(prices.underMinusThree)}}</th>
+        <th>Buffet<br>€{{money(prices.underBuffet)}}</th>
+        <th>Vpl<br>€{{money(prices.overVpl)}}</th>
+        <th>Per 5<br>€{{money(prices.overPerFive)}}</th>
+        <th>VW<br>€{{money(prices.overVw)}}</th>
+        <th>+1<br>€{{money(prices.overPlusOne)}}</th>
+        <th>+2<br>€{{money(prices.overPlusTwo)}}</th>
+        <th>+3<br>€{{money(prices.overPlusThree)}}</th>
+        <th>Buffet<br>€{{money(prices.overBuffet)}}</th>
         <th>Totaal</th>
         <th>Doel</th>
         <th>Resultaat</th>
@@ -151,7 +151,7 @@
         <td><input type="checkbox" [(ngModel)]="player.overPlusTwo" (ngModelChange)="calculateResults()" /></td>
         <td><input type="checkbox" [(ngModel)]="player.overPlusThree" (ngModelChange)="calculateResults()" /></td>
         <td><input type="checkbox" [(ngModel)]="player.overBuffet" (ngModelChange)="calculateResults()" /></td>
-        <td>€{{getTotalAmount(player)}}</td>
+        <td>€{{money(getTotalAmount(player))}}</td>
         <td>
             <input class="small" type="number" [(ngModel)]="player.goal" (ngModelChange)="calculateResults()">
         </td>
@@ -170,21 +170,21 @@
     <tfoot>
         <tr>
         <th [colSpan]="3">Totaal</th>
-        <th>€{{totals.underVpl}}<br>€{{totalsTaxed.underVpl}}</th>
-        <th>€{{totals.underPerFive}}<br>€{{totalsTaxed.underPerFive}}</th>
-        <th>€{{totals.underVw}}<br>€{{totalsTaxed.underVw}}</th>
-        <th>€{{totals.underZero}}<br>€{{totalsTaxed.underZero}}</th>
-        <th>€{{totals.underMinusOne}}<br>€{{totalsTaxed.underMinusOne}}</th>
-        <th>€{{totals.underMinusTwo}}<br>€{{totalsTaxed.underMinusTwo}}</th>
-        <th>€{{totals.underMinusThree}}<br>€{{totalsTaxed.underMinusThree}}</th>
-        <th>€{{totals.underBuffet}}<br>€{{totalsTaxed.underBuffet}}</th>
-        <th>€{{totals.overVpl}}<br>€{{totalsTaxed.overVpl}}</th>
-        <th>€{{totals.overPerFive}}<br>€{{totalsTaxed.overPerFive}}</th>
-        <th>€{{totals.overVw}}<br>€{{totalsTaxed.overVw}}</th>
-        <th>€{{totals.overPlusOne}}<br>€{{totalsTaxed.overPlusOne}}</th>
-        <th>€{{totals.overPlusTwo}}<br>€{{totalsTaxed.overPlusTwo}}</th>
-        <th>€{{totals.overPlusThree}}<br>€{{totalsTaxed.overPlusThree}}</th>
-        <th>€{{totals.overBuffet}}<br>€{{totalsTaxed.overBuffet}}</th>
+        <th>€{{money(totals.underVpl)}}<br>€{{money(totalsTaxed.underVpl)}}</th>
+        <th>€{{money(totals.underPerFive)}}<br>€{{money(totalsTaxed.underPerFive)}}</th>
+        <th>€{{money(totals.underVw)}}<br>€{{money(totalsTaxed.underVw)}}</th>
+        <th>€{{money(totals.underZero)}}<br>€{{money(totalsTaxed.underZero)}}</th>
+        <th>€{{money(totals.underMinusOne)}}<br>€{{money(totalsTaxed.underMinusOne)}}</th>
+        <th>€{{money(totals.underMinusTwo)}}<br>€{{money(totalsTaxed.underMinusTwo)}}</th>
+        <th>€{{money(totals.underMinusThree)}}<br>€{{money(totalsTaxed.underMinusThree)}}</th>
+        <th>€{{money(totals.underBuffet)}}<br>€{{money(totalsTaxed.underBuffet)}}</th>
+        <th>€{{money(totals.overVpl)}}<br>€{{money(totalsTaxed.overVpl)}}</th>
+        <th>€{{money(totals.overPerFive)}}<br>€{{money(totalsTaxed.overPerFive)}}</th>
+        <th>€{{money(totals.overVw)}}<br>€{{money(totalsTaxed.overVw)}}</th>
+        <th>€{{money(totals.overPlusOne)}}<br>€{{money(totalsTaxed.overPlusOne)}}</th>
+        <th>€{{money(totals.overPlusTwo)}}<br>€{{money(totalsTaxed.overPlusTwo)}}</th>
+        <th>€{{money(totals.overPlusThree)}}<br>€{{money(totalsTaxed.overPlusThree)}}</th>
+        <th>€{{money(totals.overBuffet)}}<br>€{{money(totalsTaxed.overBuffet)}}</th>
         <th></th>
         <th></th>
         <th></th>
@@ -194,7 +194,7 @@
 </div>
 
 <div class="table-card">
-<table class="page">
+<table class="page summary-table">
     <thead>
         <tr>
             <th [colSpan]="12">Onderzang</th>
@@ -204,14 +204,14 @@
         <th>Res.</th>
         <th>Loge</th>
         <th>Naam</th>
-        <th>VPL<br>€{{prices.underVpl}}</th>
-        <th>Per 5<br>€{{prices.underPerFive}}</th>
-        <th>VW<br>€{{prices.underVw}}</th>
-        <th>0<br>€{{prices.underZero}}</th>
-        <th>-1<br>€{{prices.underMinusOne}}</th>
-        <th>-2<br>€{{prices.underMinusTwo}}</th>
-        <th>-3<br>€{{prices.underMinusThree}}</th>
-        <th>Buffet<br>€{{prices.underBuffet}}</th>
+        <th>VPL<br>€{{money(prices.underVpl)}}</th>
+        <th>Per 5<br>€{{money(prices.underPerFive)}}</th>
+        <th>VW<br>€{{money(prices.underVw)}}</th>
+        <th>0<br>€{{money(prices.underZero)}}</th>
+        <th>-1<br>€{{money(prices.underMinusOne)}}</th>
+        <th>-2<br>€{{money(prices.underMinusTwo)}}</th>
+        <th>-3<br>€{{money(prices.underMinusThree)}}</th>
+        <th>Buffet<br>€{{money(prices.underBuffet)}}</th>
         <th>Totaal</th>
     </tr>
     @for (result of underResults; track $index) {
@@ -225,42 +225,42 @@
         <td>{{result.player.name}}</td>
         <td>
             @if (result.underVpl > 0) {
-                €{{result.underVpl * (1 - tax.underVpl)}}
+                €{{money(result.underVpl * (1 - tax.underVpl))}}
             }
         </td>
         <td>
             @if (result.underPerFive > 0) {
-                €{{result.underPerFive * (1 - tax.underPerFive)}}
+                €{{money(result.underPerFive * (1 - tax.underPerFive))}}
             }
         </td>
         <td>
             @if (result.underVw > 0) {
-                €{{result.underVw * (1 - tax.underVw)}}
+                €{{money(result.underVw * (1 - tax.underVw))}}
             }
         </td>
         <td>
             @if (result.underZero > 0) {
-                €{{result.underZero * (1 - tax.underZero)}}
+                €{{money(result.underZero * (1 - tax.underZero))}}
             }
         </td>
         <td>
             @if (result.underMinusOne > 0) {
-                €{{result.underMinusOne * (1 - tax.underMinusOne)}}
+                €{{money(result.underMinusOne * (1 - tax.underMinusOne))}}
             }
         </td>
         <td>
             @if (result.underMinusTwo > 0) {
-                €{{result.underMinusTwo * (1 - tax.underMinusTwo)}}
+                €{{money(result.underMinusTwo * (1 - tax.underMinusTwo))}}
             }
         </td>
         <td>
             @if (result.underMinusThree > 0) {
-                €{{result.underMinusThree * (1 - tax.underMinusThree)}}
+                €{{money(result.underMinusThree * (1 - tax.underMinusThree))}}
             }
         </td>
         <td>
             @if (result.underBuffet > 0) {
-                €{{result.underBuffet * (1 - tax.underBuffet)}}
+                €{{money(result.underBuffet * (1 - tax.underBuffet))}}
             }
         </td>
         <td>{{getResultTotal(result)}}</td>
@@ -270,7 +270,7 @@
 </div>
 
 <div class="table-card">
-<table class="page">
+<table class="page summary-table">
     <thead>
         <tr>
             <th [colSpan]="11">Overzang</th>
@@ -280,13 +280,13 @@
         <th>Res.</th>
         <th>Loge</th>
         <th>Naam</th>
-        <th>VPL<br>€{{prices.overVpl}}</th>
-        <th>Per 5<br>€{{prices.overPerFive}}</th>
-        <th>VW<br>€{{prices.overVw}}</th>
-        <th>+1<br>€{{prices.overPlusOne}}</th>
-        <th>+2<br>€{{prices.overPlusTwo}}</th>
-        <th>+3<br>€{{prices.overPlusThree}}</th>
-        <th>Buffet<br>€{{prices.overBuffet}}</th>
+        <th>VPL<br>€{{money(prices.overVpl)}}</th>
+        <th>Per 5<br>€{{money(prices.overPerFive)}}</th>
+        <th>VW<br>€{{money(prices.overVw)}}</th>
+        <th>+1<br>€{{money(prices.overPlusOne)}}</th>
+        <th>+2<br>€{{money(prices.overPlusTwo)}}</th>
+        <th>+3<br>€{{money(prices.overPlusThree)}}</th>
+        <th>Buffet<br>€{{money(prices.overBuffet)}}</th>
         <th>Totaal</th>
     </tr>
     @for (result of overResults; track $index) {
@@ -300,37 +300,37 @@
         <td>{{result.player.name}}</td>
         <td>
             @if (result.overVpl > 0) {
-                €{{result.overVpl * (1 - tax.overVpl)}}
+                €{{money(result.overVpl * (1 - tax.overVpl))}}
             }
         </td>
         <td>
             @if (result.overPerFive > 0) {
-                €{{result.overPerFive * (1 - tax.overPerFive)}}
+                €{{money(result.overPerFive * (1 - tax.overPerFive))}}
             }
         </td>
         <td>
             @if (result.overVw > 0) {
-                €{{result.overVw * (1 - tax.overVw)}}
+                €{{money(result.overVw * (1 - tax.overVw))}}
             }
         </td>
         <td>
             @if (result.overPlusOne > 0) {
-                €{{result.overPlusOne * (1 - tax.overPlusOne)}}
+                €{{money(result.overPlusOne * (1 - tax.overPlusOne))}}
             }
         </td>
         <td>
             @if (result.overPlusTwo > 0) {
-                €{{result.overPlusTwo * (1 - tax.overPlusTwo)}}
+                €{{money(result.overPlusTwo * (1 - tax.overPlusTwo))}}
             }
         </td>
         <td>
             @if (result.overPlusThree > 0) {
-                €{{result.overPlusThree * (1 - tax.overPlusThree)}}
+                €{{money(result.overPlusThree * (1 - tax.overPlusThree))}}
             }
         </td>
         <td>
             @if (result.overBuffet > 0) {
-                €{{result.overBuffet * (1 - tax.overBuffet)}}
+                €{{money(result.overBuffet * (1 - tax.overBuffet))}}
             }
         </td>
         <td>{{getResultTotal(result)}}</td>
