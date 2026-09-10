@@ -476,6 +476,10 @@ export class HomeComponent implements OnInit{
         window.URL.revokeObjectURL(url);
     }
 
+    protected money(value: number): string {
+        return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
+    }
+
     getResultTotal(result: Result): string {
         let totalTaxed = 0;
 
